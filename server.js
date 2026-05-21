@@ -5,11 +5,16 @@ const mysql = require('mysql2');
 
 const app = express();
 
-// Middlewares
-app.use(cors());
+
+app.use(cors({
+    origin: 'https://study-room-reservation-system.vercel.app', 
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
+
 app.use(express.json());
 
-// Connection to Railway
+
 const db = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -22,7 +27,7 @@ const db = mysql.createPool({
 
 console.log('Connected to database:', db.config.connectionConfig.database);
 
-// Routes
+
 const roomsRouter = require('./routes/rooms');
 const featuresRouter = require('./routes/features');
 const roomsFeaturesRouter = require('./routes/rooms_features');
@@ -35,8 +40,8 @@ app.use('/rooms-features', roomsFeaturesRouter(db));
 app.use('/reservations', reservationsRouter(db));
 app.use('/auth', authRouter(db));
 
-// Initialize server
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
