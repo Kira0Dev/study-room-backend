@@ -17,6 +17,14 @@ app.use(cors({
 
 
 app.use(express.json());
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
+
 
 
 const db = mysql.createPool({
