@@ -57,3 +57,12 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+console.log('DB config', db.config.connectionConfig);
+
+app.get('/_db-test', (req, res) => {
+  db.query('SELECT 1 + 1 AS result', (err, results) => {
+    if (err) return res.status(500).json({ ok: false, error: err.message });
+    res.json({ ok: true, result: results[0].result });
+  });
+});
